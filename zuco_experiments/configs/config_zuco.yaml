@@ -1,0 +1,109 @@
+# ============================================
+# ZuCo EEG-to-Text 实验配置
+# ============================================
+
+# 数据配置
+data:
+  root_dir: "F:/Zuco"
+  task: "TSR"  # "NR" (Normal Reading) or "TSR" (Task-Specific Reading)
+  eeg_type: "gip"  # "gip", "bip", or "oip"
+  subjects:
+    - YAC
+    - YAG
+    - YAK
+    - YDG
+    - YDR
+    - YFR
+    - YFS
+    - YHS
+    - YIS
+    - YLS
+    - YMD
+    - YMS
+    - YRH
+    - YRK
+    - YRP
+    - YSD
+    - YSL
+    - YTL
+  exclude_subjects:
+    - YMH  # 数据不完整（阅读障碍）
+  n_channels: 384  # 使用词级频域特征（384维）作为通道
+  n_electrode_pairs: 48  # 用于计算差异值的电极对数量
+  n_freq_bands: 8  # 频段数量 (theta1, theta2, alpha1, alpha2, beta1, beta2, gamma1, gamma2)
+  freq_features_dim: 384  # 48 * 8 = 384
+  batch_size: 16  # 减小batch size避免显存问题
+  num_workers: 0  # Windows下避免多进程问题
+  max_words: null  # null表示不限制，用于快速测试可以设置如10000
+  max_sentences: null  # null表示不限制
+
+# 留一被试实验配置 (Leave-One-Subject-Out)
+leave_one_out:
+  enabled: true  # 是否启用留一被试实验
+  validation_subject: "YTL"  # 预留用于评估的被试
+
+# 模型配置
+model:
+  # EEG编码器
+  eeg_encoder:
+    n_channels: 384  # 使用词级频域特征（384维）
+    n_freq_features: 384  # 48pairs * 8bands
+    embedding_dim: 768
+    temporal_kernel: 25
+    n_filters: 40
+    dropout: 0.5
+
+  # 多token投影
+  multi_token:
+    n_tokens: 16
+    hidden_dim: 768
+
+  # 对比学习
+  contrastive:
+    embedding_dim: 768
+    temperature: 0.07
+    projection_dim: 512
+
+  # 解码器 (英文BART)
+  decoder:
+    type: "bart"
+    bart_model: "F:/model/bart-base"  # 本地BART模型
+    hidden_dim: 768  # BART-base的d_model
+    dropout: 0.1
+    lora_r: 8
+    lora_alpha: 16
+    lora_dropout: 0.1
+
+# 训练配置
+training:
+  # 阶段1：对比学习 (词级)
+  contrastive_epochs: 20
+  contrastive_lr: 1e-4
+  contrastive_weight_decay: 0.01
+  contrastive_log_interval: 50
+  contrastive_save_interval: 5
+
+  # 阶段2：生成学习 (句子级)
+  generation_epochs: 30
+  generation_lr: 5e-5  # LoRA用较小学习率
+  generation_weight_decay: 0.01
+  generation_log_interval: 50
+  generation_save_interval: 5
+
+  # 通用
+  gradient_clip: 1.0
+  scheduler: "cosine"
+  warmup_epochs: 3
+
+# 评估配置
+evaluation:
+  metrics: ["bleu1", "bleu2", "bleu3", "bleu4", "rouge", "meteor", "bertscore"]
+  beam_size: 4
+  max_generation_length: 50
+
+# 实验配置
+experiment:
+  name: "zuco_eeg2text_english"
+  seed: 42
+  device: "cuda"  # cuda, cpu
+  save_dir: "./zuco_experiments/checkpoints"
