@@ -1,0 +1,87 @@
+{
+  "metric": "bleu1",
+  "freeze_eeg_filter": true,
+  "tag_filter": "main",
+  "target_variant_ours": "linear_multi",
+  "pairing": "paired_by_subject (Wilcoxon signed-rank)",
+  "n_subjects_per_variant": {
+    "linear_multi": 10,
+    "multi_token": 10,
+    "single_token": 10,
+    "transformer": 10
+  },
+  "pairwise_vs_ours_joint_linear": {
+    "single_token": {
+      "test": "Wilcoxon signed-rank",
+      "n_pairs": 10,
+      "paired_subjects": [
+        "sub-04",
+        "sub-05",
+        "sub-06",
+        "sub-07",
+        "sub-08",
+        "sub-09",
+        "sub-10",
+        "sub-13",
+        "sub-14",
+        "sub-15"
+      ],
+      "wins_target": 10,
+      "losses_target": 0,
+      "statistic": 0.0,
+      "p_value": 0.001953,
+      "stars": "**",
+      "significant": true,
+      "direction": "target_better",
+      "mean_diff_target_vs_baseline": 0.02177
+    },
+    "transformer": {
+      "test": "Wilcoxon signed-rank",
+      "n_pairs": 10,
+      "paired_subjects": [
+        "sub-04",
+        "sub-05",
+        "sub-06",
+        "sub-07",
+        "sub-08",
+        "sub-09",
+        "sub-10",
+        "sub-13",
+        "sub-14",
+        "sub-15"
+      ],
+      "wins_target": 6,
+      "losses_target": 4,
+      "statistic": 18.0,
+      "p_value": 0.375,
+      "stars": "ns",
+      "significant": false,
+      "direction": "target_better",
+      "mean_diff_target_vs_baseline": 0.00531
+    },
+    "multi_token": {
+      "test": "Wilcoxon signed-rank",
+      "n_pairs": 10,
+      "paired_subjects": [
+        "sub-04",
+        "sub-05",
+        "sub-06",
+        "sub-07",
+        "sub-08",
+        "sub-09",
+        "sub-10",
+        "sub-13",
+        "sub-14",
+        "sub-15"
+      ],
+      "wins_target": 9,
+      "losses_target": 1,
+      "statistic": 1.0,
+      "p_value": 0.003906,
+      "stars": "**",
+      "significant": true,
+      "direction": "target_better",
+      "mean_diff_target_vs_baseline": 0.010886
+    }
+  }
+}

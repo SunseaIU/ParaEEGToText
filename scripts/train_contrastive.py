@@ -1,6 +1,11 @@
 #!/usr/bin/env python
 """
-对比学习训练脚本
+Stage-1 对比对齐训练脚本
+========================
+用法（LOSO：--val_subject 为留出被试，其余 9 人训练）：
+    python scripts/train_contrastive.py --val_subject sub-04
+    python scripts/train_contrastive.py --config_path config_gpu.yaml
+产物：checkpoints/{val_subject}_contrastive_final.pt
 """
 import sys
 
@@ -9,6 +14,14 @@ script_dir = os.path.dirname(os.path.abspath(__file__))
 project_root = os.path.dirname(script_dir)
 sys.path.insert(0, project_root)
 
+# 环境变量必须在 import mne / transformers / peft 之前设置
+os.environ.setdefault('TRANSFORMERS_OFFLINE', '1')
+os.environ.setdefault('HF_HUB_OFFLINE', '1')
+os.environ.setdefault('HF_DATASETS_OFFLINE', '1')
+os.environ.setdefault('MPLBACKEND', 'Agg')
+os.environ.setdefault('NUMBA_DISABLE_JIT', '1')
+
+import argparse
 import torch
 from src.data.dataset import ChineseEEGDataset, create_dataloaders
 from src.models.eeg_encoder import NICE_EEG_Encoder
@@ -21,9 +34,22 @@ logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
 
 
+def parse_args():
+    p = argparse.ArgumentParser(description="Stage-1 contrastive alignment training")
+    p.add_argument("--config_path", default="config_gpu.yaml")
+    p.add_argument("--val_subject", default=None,
+                   help="LOSO 留出被试（覆盖 config data.val_subject）；"
+                        "checkpoint 保存为 checkpoints/{val_subject}_contrastive_final.pt")
+    return p.parse_args()
+
+
 def main():
+    args = parse_args()
     # 加载配置
-    config = load_config(os.path.join(project_root, 'config_gpu.yaml'))
+    config = load_config(os.path.join(project_root, args.config_path))
+    if args.val_subject:
+        config['data']['val_subject'] = args.val_subject
+        logger.info(f"LOSO val_subject override: {args.val_subject}")
     set_seed(config['experiment']['seed'])
     device = get_device()
     logger.info(f"Using device: {device}")

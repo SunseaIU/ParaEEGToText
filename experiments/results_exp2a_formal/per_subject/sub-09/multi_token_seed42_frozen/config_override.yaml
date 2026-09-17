@@ -1,0 +1,101 @@
+ablation_run:
+  batch_size: 32
+  config_path: config_gpu.yaml
+  contrastive_root: checkpoints
+  data_ratio: 0.35
+  epochs: 25
+  freeze_eeg: true
+  gradient_accumulation: 4
+  lr: 0.0004
+  output_root: D:\01-Code\EEGProject\ParaEEGToText\experiments\results_exp2a_formal
+  seed: 42
+  subject: sub-09
+  val_interval: 5
+  variant: multi_token
+  warmup_epochs: 3
+  weight_decay: 0.01
+data:
+  augment: true
+  batch_size: 32
+  cache_dir: E:/eeg_cache
+  char_duration: 350
+  data_ratio: 0.35
+  exclude_subjects:
+  - sub-11
+  - sub-12
+  gradient_accumulation_steps: 4
+  granularity: paragraph
+  granularity_generation: paragraph
+  max_row_samples: 1024
+  n_channels: 128
+  novels:
+  - ses-GarnettDream
+  num_workers: 0
+  paragraph_cache_dir: E:/eeg_cache_para
+  paragraph_n_rows: 3
+  pin_memory: false
+  prefetch_factor: 2
+  root_dir: F:/ChineseEEG
+  row_cache_dir: E:/eeg_cache_row
+  sampling_rate: 256
+  shuffle: true
+  subjects:
+  - sub-04
+  - sub-05
+  - sub-06
+  - sub-07
+  - sub-08
+  - sub-09
+  - sub-10
+  - sub-13
+  - sub-14
+  - sub-15
+  test_ratio: 0.1
+  time_window:
+  - 0
+  - 350
+  train_ratio: 0.8
+  val_ratio: 0.1
+  val_subject: sub-09
+experiment:
+  device: cuda
+  mixed_precision: true
+  name: eeg2text_chinese_gpu
+  seed: 42
+model:
+  contrastive:
+    curriculum_end: 1.0
+    curriculum_start: 0.3
+    embedding_dim: 256
+    n_curriculum_epochs: 20
+    projection_dim: 128
+    temperature: 0.07
+  decoder:
+    bart_model: fnlp/bart-base-chinese
+    dropout: 0.1
+    hidden_dim: 256
+    n_eeg_tokens: 16
+    n_layers: 2
+    type: bart
+    vocab_size: 50000
+  eeg_encoder:
+    dropout: 0.6
+    embedding_dim: 256
+    n_channels: 128
+    n_filters: 20
+    n_times: 3072
+    temporal_kernel: 25
+    use_graph_attention: false
+    use_spatial_attention: true
+training:
+  amp: true
+  contrastive_epochs: 15
+  contrastive_lr: 2.0e-05
+  contrastive_weight_decay: 0.01
+  generation_epochs: 20
+  generation_lr: 0.0004
+  generation_weight_decay: 0.01
+  gradient_accumulation_steps: 2
+  gradient_clip: 1.0
+  scheduler: cosine
+  warmup_epochs: 3

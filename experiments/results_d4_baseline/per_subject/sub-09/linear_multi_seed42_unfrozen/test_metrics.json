@@ -1,0 +1,28 @@
+{
+  "subject": "sub-09",
+  "variant": "linear_multi",
+  "variant_display": "Joint Linear (Ours)",
+  "seed": 42,
+  "freeze_eeg": false,
+  "epochs": 25,
+  "batch_size": 32,
+  "gradient_accumulation": 4,
+  "effective_batch_size": 128,
+  "lr": 0.0004,
+  "best_epoch": 25,
+  "best_val_loss": 1.534065,
+  "total_train_minutes": 87.85,
+  "total_params_M": 146.648,
+  "trainable_params_M": 6.455,
+  "projection_params_M": 4.503,
+  "metrics": {
+    "bleu1": 0.13715091587654754,
+    "bleu2": 0.044859613138369996,
+    "bleu3": 0.021076903235948134,
+    "bleu4": 0.014151812420404399,
+    "meteor": 0.08741874914708647,
+    "bertscore_p": 0.6178666949272156,
+    "bertscore_r": 0.5845439434051514,
+    "bertscore_f1": 0.6003395318984985
+  }
+}

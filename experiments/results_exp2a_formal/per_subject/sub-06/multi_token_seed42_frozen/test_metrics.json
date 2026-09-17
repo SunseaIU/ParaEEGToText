@@ -1,0 +1,28 @@
+{
+  "subject": "sub-06",
+  "variant": "multi_token",
+  "variant_display": "Independent Heads",
+  "seed": 42,
+  "freeze_eeg": true,
+  "epochs": 25,
+  "batch_size": 32,
+  "gradient_accumulation": 4,
+  "effective_batch_size": 128,
+  "lr": 0.0004,
+  "best_epoch": 25,
+  "best_val_loss": 1.710067,
+  "total_train_minutes": 50.55,
+  "total_params_M": 146.63,
+  "trainable_params_M": 4.994,
+  "projection_params_M": 4.485,
+  "metrics": {
+    "bleu1": 0.13790905532245767,
+    "bleu2": 0.041515068720601185,
+    "bleu3": 0.02122708493384834,
+    "bleu4": 0.013326046611533415,
+    "meteor": 0.08316455971588183,
+    "bertscore_p": 0.614852786064148,
+    "bertscore_r": 0.5741305351257324,
+    "bertscore_f1": 0.5934796333312988
+  }
+}

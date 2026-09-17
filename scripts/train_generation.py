@@ -1,6 +1,10 @@
 #!/usr/bin/env python
 """
-生成模型训练脚本
+Stage-2 生成微调脚本（加载 Stage-1 对比权重，冻结编码器，LoRA 微调 BART）
+=====================================================================
+用法（LOSO）：
+    python scripts/train_generation.py --val_subject sub-04
+产物：checkpoints/{val_subject}_generation_final.pt
 """
 import sys
 
@@ -9,11 +13,16 @@ script_dir = os.path.dirname(os.path.abspath(__file__))
 project_root = os.path.dirname(script_dir)
 sys.path.insert(0, project_root)
 
-# 禁止 transformers 联网，使用本地缓存
-os.environ['TRANSFORMERS_OFFLINE'] = '1'
+# 环境变量必须在 import mne / transformers / peft 之前设置
+os.environ.setdefault('TRANSFORMERS_OFFLINE', '1')
+os.environ.setdefault('HF_HUB_OFFLINE', '1')
+os.environ.setdefault('HF_DATASETS_OFFLINE', '1')
+os.environ.setdefault('MPLBACKEND', 'Agg')
+os.environ.setdefault('NUMBA_DISABLE_JIT', '1')
 
 CHECKPOINTS_DIR = os.path.join(project_root, 'checkpoints')
 
+import argparse
 import torch
 from src.data.dataset import create_dataloaders
 from src.models.eeg_encoder import NICE_EEG_Encoder
@@ -26,9 +35,21 @@ logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
 
 
+def parse_args():
+    p = argparse.ArgumentParser(description="Stage-2 generative fine-tuning")
+    p.add_argument("--config_path", default="config_gpu.yaml")
+    p.add_argument("--val_subject", default=None,
+                   help="LOSO 留出被试（覆盖 config data.val_subject）")
+    return p.parse_args()
+
+
 def main():
+    args = parse_args()
     # 加载配置
-    config = load_config(os.path.join(project_root, 'config_gpu.yaml'))
+    config = load_config(os.path.join(project_root, args.config_path))
+    if args.val_subject:
+        config['data']['val_subject'] = args.val_subject
+        logger.info(f"LOSO val_subject override: {args.val_subject}")
     set_seed(config['experiment']['seed'])
     device = get_device()
     logger.info(f"Using device: {device}")
@@ -61,10 +82,11 @@ def main():
         for k, v in checkpoint['model_state_dict'].items()
         if k.startswith('eeg_encoder.')
     }
-    # strict=False：忽略图注意力相关的 key（生成阶段可能关闭图注意力）
+    # strict=False：checkpoint 是 ContrastiveLearner 的 state_dict（含投影头 key），
+    # 这里只加载 eeg_encoder.* 前缀的权重，其余 key 忽略。
     missing, unexpected = eeg_encoder.load_state_dict(encoder_state, strict=False)
     if unexpected:
-        logger.info(f"Ignored keys (graph attention disabled): {unexpected[:3]}...")
+        logger.info(f"Ignored non-encoder keys ({len(unexpected)}): {unexpected[:3]}...")
     logger.info("Loaded pretrained EEG encoder weights")
 
     # 创建解码器

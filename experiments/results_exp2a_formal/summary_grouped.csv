@@ -1,0 +1,5 @@
+﻿tag,freeze_eeg,variant,variant_display,n_runs,bleu1_mean,bleu1_std,bleu1_n,bleu2_mean,bleu2_std,bleu2_n,bleu3_mean,bleu3_std,bleu3_n,bleu4_mean,bleu4_std,bleu4_n,meteor_mean,meteor_std,meteor_n,bertscore_p_mean,bertscore_p_std,bertscore_p_n,bertscore_r_mean,bertscore_r_std,bertscore_r_n,bertscore_f1_mean,bertscore_f1_std,bertscore_f1_n
+main,True,linear_multi,Joint Linear (Ours),10,0.154574,0.012031,10,0.045125,0.007769,10,0.021988,0.004568,10,0.014126,0.002506,10,0.093667,0.009165,10,0.615667,0.003547,10,0.588302,0.007068,10,0.601354,0.004419,10
+main,True,multi_token,Independent Heads,10,0.143688,0.007811,10,0.044154,0.005111,10,0.021657,0.004136,10,0.014106,0.002867,10,0.08795,0.006268,10,0.61688,0.008472,10,0.584494,0.005754,10,0.599964,0.006516,10
+main,True,single_token,Single Token,10,0.132804,0.011612,10,0.037659,0.004019,10,0.01811,0.001518,10,0.012234,0.000816,10,0.079589,0.006052,10,0.627244,0.004171,10,0.579736,0.007132,10,0.602225,0.004261,10
+main,True,transformer,Transformer,10,0.149265,0.014436,10,0.041273,0.004279,10,0.019514,0.001455,10,0.012838,0.000837,10,0.089411,0.009262,10,0.621786,0.007204,10,0.580097,0.006587,10,0.599872,0.004728,10

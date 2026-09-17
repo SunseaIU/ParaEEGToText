@@ -53,6 +53,30 @@ def download_bert_chinese():
     print()
 
 
+def download_bart_chinese():
+    print("=" * 50)
+    print("Downloading fnlp/bart-base-chinese...")
+    print("(Used as the Stage-2 text decoder with LoRA)")
+
+    os.environ['HF_ENDPOINT'] = 'https://hf-mirror.com'
+    print(f"  Using mirror: {os.environ['HF_ENDPOINT']}")
+
+    try:
+        from transformers import BartForConditionalGeneration, AutoTokenizer
+        model_id = 'fnlp/bart-base-chinese'
+        print(f"  Downloading tokenizer from {model_id}...")
+        AutoTokenizer.from_pretrained(model_id)
+        print(f"  Downloading model from {model_id}...")
+        BartForConditionalGeneration.from_pretrained(model_id)
+        print(f"  ✓ {model_id} downloaded successfully")
+    except Exception as e:
+        print(f"  ✗ Failed: {e}")
+        print("  Try manually in terminal:")
+        print("    $env:HF_ENDPOINT='https://hf-mirror.com'")
+        print("    python -c \"from transformers import BartForConditionalGeneration; BartForConditionalGeneration.from_pretrained('fnlp/bart-base-chinese')\"")
+    print()
+
+
 def verify():
     print("=" * 50)
     print("Verifying resources...")
@@ -90,4 +114,5 @@ def verify():
 if __name__ == '__main__':
     download_nltk_data()
     download_bert_chinese()
+    download_bart_chinese()
     verify()

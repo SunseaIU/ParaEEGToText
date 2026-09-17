@@ -1,0 +1,29 @@
+# ---- Python ----
+__pycache__/
+*.py[cod]
+*.egg-info/
+.ipynb_checkpoints/
+
+# ---- IDE ----
+.idea/
+.vscode/
+
+# ---- Logs ----
+*.log
+*.out
+*.out.log
+logs/
+
+# ---- Model weights / checkpoints（可由训练命令重新生成）----
+*.pt
+
+# ---- Demo 临时产物 ----
+demo/output/
+
+# ---- Data caches（构建脚本生成，体积极大；不入库）----
+eeg_cache*/
+*.fif
+
+# ---- OS ----
+Thumbs.db
+.DS_Store

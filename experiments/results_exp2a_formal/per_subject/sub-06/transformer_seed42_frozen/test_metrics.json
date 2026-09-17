@@ -1,0 +1,28 @@
+{
+  "subject": "sub-06",
+  "variant": "transformer",
+  "variant_display": "Transformer",
+  "seed": 42,
+  "freeze_eeg": true,
+  "epochs": 25,
+  "batch_size": 32,
+  "gradient_accumulation": 4,
+  "effective_batch_size": 128,
+  "lr": 0.0004,
+  "best_epoch": 25,
+  "best_val_loss": 2.152812,
+  "total_train_minutes": 49.86,
+  "total_params_M": 147.083,
+  "trainable_params_M": 5.447,
+  "projection_params_M": 4.939,
+  "metrics": {
+    "bleu1": 0.15076313268974356,
+    "bleu2": 0.04315816276995829,
+    "bleu3": 0.020884286680045962,
+    "bleu4": 0.013615558197753622,
+    "meteor": 0.09261111969986167,
+    "bertscore_p": 0.6339051723480225,
+    "bertscore_r": 0.5893951654434204,
+    "bertscore_f1": 0.6105605959892273
+  }
+}

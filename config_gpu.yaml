@@ -46,7 +46,7 @@ model:
     n_filters: 20
     dropout: 0.6
     use_spatial_attention: true
-    use_graph_attention: false  # 段落级时间维度大，图注意力太慢
+    use_graph_attention: false  # 论文报告的模型不含图注意力（无电极坐标/图先验）；复现论文结果必须保持 false。仅保留开关用于消融。
 
   contrastive:
     embedding_dim: 256

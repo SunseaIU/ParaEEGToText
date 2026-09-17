@@ -1,0 +1,15 @@
+{
+  "subject": "sub-15",
+  "checkpoint": "d:\\01-Code\\EEGProject\\para-eeg-to-text\\checkpoints\\sub-15_generation_final.pt",
+  "n_test": 361,
+  "metrics": {
+    "bleu1": 0.1406854757941604,
+    "bleu2": 0.04187075908394782,
+    "bleu3": 0.0208656003550221,
+    "bleu4": 0.013309859386525298,
+    "meteor": 0.08758822086423683,
+    "bertscore_p": 0.6200882792472839,
+    "bertscore_r": 0.5794889330863953,
+    "bertscore_f1": 0.5987071394920349
+  }
+}
